@@ -7,6 +7,7 @@ import com.openquartz.javaobjdiff.annotation.DiffIgnore;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ReflectionDiffBuilder
+ * CacheReflectionDiffBuilder
  *
  * @author svnee
  */
@@ -57,6 +58,17 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
     }
 
     private void appendFields(final Class<?> clazz) {
+
+        if (Collection.class.isAssignableFrom(clazz)) {
+            diffBuilder.append("element", left, right);
+            return;
+        }
+
+        if (Map.class.isAssignableFrom(clazz)) {
+            diffBuilder.append("map", left, right);
+            return;
+        }
+
         for (final Field field : getAllFields(clazz)) {
             if (accept(field)) {
                 try {
@@ -102,9 +114,15 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
 
     public static List<Field> getAllFields(Class<?> clazz) {
         try {
+
+            List<Field> fieldList = FIELD_CACHE.get(clazz);
+            if (fieldList != null) {
+                return fieldList;
+            }
+
             return FIELD_CACHE.putIfAbsent(clazz, getEffectiveFields(clazz));
         } catch (Exception exception) {
-            log.info("[CacheFiledUtil#getAllFields] class:{} execute error!", clazz);
+            log.info("[CacheReflectionDiffBuilder#getAllFields] class:{} execute error!", clazz);
             return ExceptionUtils.rethrow(exception);
         }
     }

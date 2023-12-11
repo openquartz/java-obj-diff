@@ -2,18 +2,21 @@ package com.openquartz.javaobjdiff;
 
 import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+/**
+ * @author svnee
+ * @param <T> T
+ */
 public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
     private final List<Diff<?>> diffs;
@@ -95,8 +98,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final byte lhs,
-        final byte rhs) {
+    public DiffBuilder<T> append(final String fieldName, final byte lhs, final byte rhs) {
         validateFieldNameNotNull(fieldName);
         if (objectsTriviallyEqual) {
             return this;
@@ -119,8 +121,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final byte[] lhs,
-        final byte[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final byte[] lhs, final byte[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -171,6 +173,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
     public DiffBuilder<T> append(final String fieldName, final char[] lhs,
         final char[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -194,8 +197,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final double lhs,
-        final double rhs) {
+    public DiffBuilder<T> append(final String fieldName, final double lhs, final double rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -257,8 +260,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final float lhs,
-        final float rhs) {
+    public DiffBuilder<T> append(final String fieldName, final float lhs, final float rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -293,8 +296,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final float[] lhs,
-        final float[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final float[] lhs, final float[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -329,8 +332,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final int lhs,
-        final int rhs) {
+    public DiffBuilder<T> append(final String fieldName, final int lhs, final int rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -365,8 +368,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final int[] lhs,
-        final int[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final int[] lhs, final int[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -401,8 +404,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final long lhs,
-        final long rhs) {
+    public DiffBuilder<T> append(final String fieldName, final long lhs, final long rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -426,8 +429,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final long[] lhs,
-        final long[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final long[] lhs, final long[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -451,8 +454,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final short lhs,
-        final short rhs) {
+    public DiffBuilder<T> append(final String fieldName, final short lhs, final short rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -476,8 +479,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final short[] lhs,
-        final short[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final short[] lhs, final short[] rhs) {
+
         validateFieldNameNotNull(fieldName);
 
         if (objectsTriviallyEqual) {
@@ -501,14 +504,16 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final Field field, final Object lhs,
-        final Object rhs) {
+    public DiffBuilder<T> append(final Field field, final Object lhs, final Object rhs) {
 
         validateFieldNotNull(field);
+
         String fieldName = field.getName();
+
         if (objectsTriviallyEqual) {
             return this;
         }
+
         if (lhs == rhs) {
             return this;
         }
@@ -520,7 +525,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             if (diffComparable.diff(lhs, rhs)) {
                 return this;
             }
-            diffs.add(new Diff<Object>(fieldName) {
+            diffs.add(new Diff<>(fieldName) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -537,15 +542,23 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        // 处理 collection
+        return append(fieldName, lhs, rhs);
+    }
+
+    public DiffBuilder<T> append(final String fieldName, final Object lhs, final Object rhs) {
+
+        validateFieldNameNotNull(fieldName);
+
+        if (objectsTriviallyEqual) {
+            return this;
+        }
+        if (lhs == rhs) {
+            return this;
+        }
 
         final Object objectToTest;
-        if (lhs != null) {
-            objectToTest = lhs;
-        } else {
-            // rhs cannot be null, as lhs != rhs
-            objectToTest = rhs;
-        }
+        // rhs cannot be null, as lhs != rhs
+        objectToTest = Objects.requireNonNullElse(lhs, rhs);
 
         if (objectToTest.getClass().isArray()) {
             if (objectToTest instanceof boolean[]) {
@@ -581,7 +594,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        diffs.add(new Diff<Object>(fieldName) {
+        diffs.add(new Diff<>(fieldName) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -621,7 +634,9 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
     public DiffBuilder<T> append(final String fieldName, final Object[] lhs,
         final Object[] rhs) {
+
         validateFieldNameNotNull(fieldName);
+
         if (objectsTriviallyEqual) {
             return this;
         }

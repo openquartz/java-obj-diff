@@ -3,6 +3,7 @@ package com.openquartz.javaobjdiff;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,7 +12,7 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
 
     public static final String OBJECTS_SAME_STRING = "";
 
-    private static final String DIFFERS_STRING = "differs from";
+    private static final String DIFFERS_STRING = "->";
 
     private final List<Diff<?>> diffList;
     private final T lhs;
@@ -28,11 +29,7 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
         this.lhs = lhs;
         this.rhs = rhs;
 
-        if (style == null) {
-            this.style = ToStringStyle.DEFAULT_STYLE;
-        } else {
-            this.style = style;
-        }
+        this.style = Objects.requireNonNullElse(style, ToStringStyle.DEFAULT_STYLE);
     }
 
     public T getLeft() {
