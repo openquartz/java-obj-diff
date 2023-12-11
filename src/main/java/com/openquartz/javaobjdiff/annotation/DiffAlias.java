@@ -14,4 +14,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface DiffAlias {
 
+    /**
+     * 别名
+     */
+    String alias() default "";
+
 }

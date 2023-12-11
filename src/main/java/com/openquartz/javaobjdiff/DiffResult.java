@@ -7,7 +7,14 @@ import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.tuple.Pair;
 
+/**
+ * DiffResult
+ *
+ * @param <T> T
+ * @author svnee
+ */
 public class DiffResult<T> implements Iterable<Diff<?>> {
 
     public static final String OBJECTS_SAME_STRING = "";
@@ -20,7 +27,7 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
     private final ToStringStyle style;
 
     DiffResult(final T lhs, final T rhs, final List<Diff<?>> diffList,
-            final ToStringStyle style) {
+        final ToStringStyle style) {
         Validate.notNull(lhs, "lhs");
         Validate.notNull(rhs, "rhs");
         Validate.notNull(diffList, "diffList");
@@ -59,15 +66,23 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
         return style;
     }
 
-
     @Override
     public String toString() {
-        return toString(style);
+
+        Pair<ToStringBuilder, ToStringBuilder> stringBuilderPair = toStringBuilder();
+
+        if (stringBuilderPair == null) {
+            return OBJECTS_SAME_STRING;
+        }
+
+        return String.format("%s %s %s", stringBuilderPair.getLeft().build(), DIFFERS_STRING,
+            stringBuilderPair.getRight().build());
     }
 
-    public String toString(final ToStringStyle style) {
+    private Pair<ToStringBuilder, ToStringBuilder> toStringBuilder() {
+
         if (diffList.isEmpty()) {
-            return OBJECTS_SAME_STRING;
+            return null;
         }
 
         final ToStringBuilder lhsBuilder = new ToStringBuilder(lhs, style);
@@ -78,8 +93,14 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
             rhsBuilder.append(diff.getFieldName(), diff.getRight());
         }
 
-        return String.format("%s %s %s", lhsBuilder.build(), DIFFERS_STRING,
-                rhsBuilder.build());
+        return Pair.of(lhsBuilder, rhsBuilder);
+    }
+
+    /**
+     * 是否存在不同
+     */
+    public boolean isDiff() {
+        return !diffList.isEmpty();
     }
 
     /**

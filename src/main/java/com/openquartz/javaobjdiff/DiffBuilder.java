@@ -8,14 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
- * @author svnee
  * @param <T> T
+ * @author svnee
  */
 public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
@@ -47,31 +50,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         this(lhs, rhs, style, true);
     }
 
-    public DiffBuilder<T> append(final String fieldName, final boolean lhs, final boolean rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Boolean>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Boolean getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Boolean getRight() {
-                    return rhs;
-                }
-            });
-        }
-        return this;
-    }
-
     public DiffBuilder<T> append(final String fieldName, final boolean[] lhs, final boolean[] rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -98,29 +76,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final byte lhs, final byte rhs) {
-        validateFieldNameNotNull(fieldName);
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Byte>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Byte getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Byte getRight() {
-                    return rhs;
-                }
-            });
-        }
-        return this;
-    }
-
     public DiffBuilder<T> append(final String fieldName, final byte[] lhs, final byte[] rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -140,31 +95,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 @Override
                 public Byte[] getRight() {
                     return ArrayUtils.toObject(rhs);
-                }
-            });
-        }
-        return this;
-    }
-
-    public DiffBuilder<T> append(final String fieldName, final char lhs,
-        final char rhs) {
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Character>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Character getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Character getRight() {
-                    return rhs;
                 }
             });
         }
@@ -197,34 +127,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final double lhs, final double rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (Double.doubleToLongBits(lhs) != Double.doubleToLongBits(rhs)) {
-            diffs.add(new Diff<Double>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Double getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Double getRight() {
-                    return rhs;
-                }
-            });
-        }
-        return this;
-    }
-
-
-    public DiffBuilder<T> append(final String fieldName, final double[] lhs,
-        final double[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final double[] lhs, final double[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -243,42 +146,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 @Override
                 public Double[] getRight() {
                     return ArrayUtils.toObject(rhs);
-                }
-            });
-        }
-        return this;
-    }
-
-    /**
-     * <p>
-     * Test if two {@code float}s are equal.
-     * </p>
-     *
-     * @param fieldName the field name
-     * @param lhs the left hand {@code float}
-     * @param rhs the right hand {@code float}
-     * @return this
-     * @throws IllegalArgumentException if field name is {@code null}
-     */
-    public DiffBuilder<T> append(final String fieldName, final float lhs, final float rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (Float.floatToIntBits(lhs) != Float.floatToIntBits(rhs)) {
-            diffs.add(new Diff<Float>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Float getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Float getRight() {
-                    return rhs;
                 }
             });
         }
@@ -323,42 +190,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
     /**
      * <p>
-     * Test if two {@code int}s are equal.
-     * </p>
-     *
-     * @param fieldName the field name
-     * @param lhs the left hand {@code int}
-     * @param rhs the right hand {@code int}
-     * @return this
-     * @throws IllegalArgumentException if field name is {@code null}
-     */
-    public DiffBuilder<T> append(final String fieldName, final int lhs, final int rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Integer>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Integer getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Integer getRight() {
-                    return rhs;
-                }
-            });
-        }
-        return this;
-    }
-
-    /**
-     * <p>
      * Test if two {@code int[]}s are equal.
      * </p>
      *
@@ -393,42 +224,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    /**
-     * <p>
-     * Test if two {@code long}s are equal.
-     * </p>
-     *
-     * @param fieldName the field name
-     * @param lhs the left hand {@code long}
-     * @param rhs the right hand {@code long}
-     * @return this
-     * @throws IllegalArgumentException if field name is {@code null}
-     */
-    public DiffBuilder<T> append(final String fieldName, final long lhs, final long rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Long>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Long getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Long getRight() {
-                    return rhs;
-                }
-            });
-        }
-        return this;
-    }
-
     public DiffBuilder<T> append(final String fieldName, final long[] lhs, final long[] rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -448,31 +243,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 @Override
                 public Long[] getRight() {
                     return ArrayUtils.toObject(rhs);
-                }
-            });
-        }
-        return this;
-    }
-
-    public DiffBuilder<T> append(final String fieldName, final short lhs, final short rhs) {
-
-        validateFieldNameNotNull(fieldName);
-
-        if (objectsTriviallyEqual) {
-            return this;
-        }
-        if (lhs != rhs) {
-            diffs.add(new Diff<Short>(fieldName) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Short getLeft() {
-                    return lhs;
-                }
-
-                @Override
-                public Short getRight() {
-                    return rhs;
                 }
             });
         }
@@ -504,11 +274,11 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final Field field, final Object lhs, final Object rhs) {
+    public DiffBuilder<T> append(String prefix, final Field field, final Object lhs, final Object rhs) {
 
         validateFieldNotNull(field);
 
-        String fieldName = field.getName();
+        String fieldName = getAllQualifiedFiledName(prefix,field);
 
         if (objectsTriviallyEqual) {
             return this;
@@ -522,7 +292,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         if (diffCompare != null) {
 
             DiffComparable diffComparable = getDiffComparator(diffCompare);
-            if (diffComparable.diff(lhs, rhs)) {
+            if (!diffComparable.diff(lhs, rhs)) {
                 return this;
             }
             diffs.add(new Diff<>(fieldName) {
@@ -545,6 +315,12 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return append(fieldName, lhs, rhs);
     }
 
+    private static String getAllQualifiedFiledName(String prefix,Field field) {
+        return Stream.of(prefix,field.getName())
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.joining(CommonConstants.POINT_SPLITTER));
+    }
+
     public DiffBuilder<T> append(final String fieldName, final Object lhs, final Object rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -556,9 +332,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        final Object objectToTest;
         // rhs cannot be null, as lhs != rhs
-        objectToTest = Objects.requireNonNullElse(lhs, rhs);
+        final Object objectToTest = Objects.requireNonNullElse(lhs, rhs);
 
         if (objectToTest.getClass().isArray()) {
             if (objectToTest instanceof boolean[]) {

@@ -1,9 +1,12 @@
 package com.openquartz.javaobjdiff;
 
-import static com.openquartz.javaobjdiff.FieldUtils.readField;
+import static com.openquartz.javaobjdiff.util.FieldUtils.readField;
 import static org.apache.commons.lang3.ClassUtils.INNER_CLASS_SEPARATOR_CHAR;
 
+import com.openquartz.javaobjdiff.annotation.DiffBean;
 import com.openquartz.javaobjdiff.annotation.DiffIgnore;
+import com.openquartz.javaobjdiff.util.ClassUtils;
+import com.openquartz.javaobjdiff.util.FieldUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -12,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -69,14 +75,35 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
             return;
         }
 
+        appendAllFields(StringUtils.EMPTY, clazz, left, right);
+    }
+
+    private void appendAllFields(String prefix, Class<?> clazz, Object leftValue, Object rightValue) {
+
+        if (leftValue == null && rightValue == null) {
+            return;
+        }
+
         for (final Field field : getAllFields(clazz)) {
+
             if (accept(field)) {
                 try {
 
-                    Object lhs = readField(field, left, true);
-                    Object rhs = readField(field, right, true);
+                    Object lhs = readField(field, leftValue, true);
+                    Object rhs = readField(field, rightValue, true);
 
-                    diffBuilder.append(field, lhs, rhs);
+                    diffBuilder.append(prefix, field, lhs, rhs);
+
+                    // append diff bean
+                    DiffBean diffBean = field.getDeclaredAnnotation(DiffBean.class);
+                    if (diffBean != null && !ClassUtils.isJDKClass(field.getType())) {
+
+                        String specPrefix = Stream.of(prefix, field.getName())
+                            .filter(StringUtils::isNotBlank)
+                            .collect(Collectors.joining(CommonConstants.POINT_SPLITTER));
+
+                        appendAllFields(specPrefix, field.getType(), lhs, rhs);
+                    }
                 } catch (final IllegalAccessException ex) {
                     //this can't happen. Would get a Security exception instead
                     //throw a runtime exception in case the impossible happens.
@@ -85,6 +112,7 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
             }
         }
     }
+
 
     private boolean accept(final Field field) {
         // 处理排除字段
@@ -120,7 +148,9 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
                 return fieldList;
             }
 
-            return FIELD_CACHE.putIfAbsent(clazz, getEffectiveFields(clazz));
+            List<Field> effectiveFields = getEffectiveFields(clazz);
+            FIELD_CACHE.putIfAbsent(clazz,effectiveFields);
+            return effectiveFields;
         } catch (Exception exception) {
             log.info("[CacheReflectionDiffBuilder#getAllFields] class:{} execute error!", clazz);
             return ExceptionUtils.rethrow(exception);

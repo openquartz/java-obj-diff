@@ -1,4 +1,4 @@
-package com.openquartz.javaobjdiff;
+package com.openquartz.javaobjdiff.util;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -42,7 +43,13 @@ public class FieldUtils {
 
     public static Object readField(final Field field, final Object target, final boolean forceAccess)
         throws IllegalAccessException {
+
+        if (Objects.isNull(target)){
+            return null;
+        }
+
         Validate.notNull(field, "field");
+
         if (forceAccess && !field.isAccessible()) {
             field.setAccessible(true);
         } else {
