@@ -2,6 +2,7 @@ package com.openquartz.javaobjdiff;
 
 import com.openquartz.javaobjdiff.annotation.DiffAlias;
 import com.openquartz.javaobjdiff.annotation.DiffCompare;
+import com.openquartz.javaobjdiff.annotation.DiffFormat;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -292,6 +293,9 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         DiffAlias diffAlias = field.getDeclaredAnnotation(DiffAlias.class);
         String alias = Objects.nonNull(diffAlias) ? diffAlias.alias() : null;
 
+        DiffFormat diffFormat = field.getDeclaredAnnotation(DiffFormat.class);
+        String pattern = Objects.nonNull(diffFormat) ? diffFormat.pattern() : null;
+
         DiffCompare diffCompare = field.getDeclaredAnnotation(DiffCompare.class);
         if (diffCompare != null) {
 
@@ -312,12 +316,12 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 public Object getRight() {
                     return rhs;
                 }
-            });
+            }.setPattern(pattern));
 
             return this;
         }
 
-        return append(fieldName, alias, lhs, rhs);
+        return append(fieldName, pattern, alias, lhs, rhs);
     }
 
     private static String getAllQualifiedFiledName(String prefix, Field field) {
@@ -327,6 +331,11 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
     }
 
     public DiffBuilder<T> append(final String fieldName, final String alias, final Object lhs, final Object rhs) {
+        return append(fieldName, StringUtils.EMPTY, alias, lhs, rhs);
+    }
+
+    public DiffBuilder<T> append(final String fieldName, final String pattern, final String alias, final Object lhs,
+        final Object rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -374,7 +383,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        diffs.add(new Diff<>(fieldName) {
+        diffs.add(new Diff<>(fieldName, alias) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -386,7 +395,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             public Object getRight() {
                 return rhs;
             }
-        });
+        }.setPattern(pattern));
 
         return this;
     }
@@ -412,8 +421,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         }
     }
 
-    public DiffBuilder<T> append(final String fieldName, final String alias, final Object[] lhs,
-        final Object[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final String alias, final Object[] lhs, final Object[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 

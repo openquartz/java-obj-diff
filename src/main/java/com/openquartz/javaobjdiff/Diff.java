@@ -2,9 +2,13 @@ package com.openquartz.javaobjdiff;
 
 import java.lang.reflect.Type;
 
+import java.util.Date;
+import java.util.Objects;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class Diff<T> extends Pair<T, T> {
@@ -18,6 +22,8 @@ public abstract class Diff<T> extends Pair<T, T> {
      * 别名
      */
     private final String alias;
+
+    private String pattern;
 
     /**
      * <p>
@@ -36,6 +42,15 @@ public abstract class Diff<T> extends Pair<T, T> {
 
     protected Diff(final String fieldName) {
         this(fieldName, null);
+    }
+
+    /**
+     * set pattern
+     * @param pattern pattern
+     */
+    public Diff<?> setPattern(String pattern) {
+        this.pattern = pattern;
+        return this;
     }
 
     /**
@@ -65,6 +80,16 @@ public abstract class Diff<T> extends Pair<T, T> {
             return alias;
         }
         return fieldName;
+    }
+
+    public Object getFormatValue(Object value){
+        if (Objects.isNull(value)){
+            return null;
+        }
+        if (value instanceof Date){
+            return DateFormatUtils.format((Date) value, pattern);
+        }
+        return value;
     }
 
     /**

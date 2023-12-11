@@ -89,8 +89,8 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
         final ToStringBuilder rhsBuilder = new ToStringBuilder(rhs, style);
 
         for (final Diff<?> diff : diffList) {
-            lhsBuilder.append(diff.getActualName(), diff.getLeft());
-            rhsBuilder.append(diff.getActualName(), diff.getRight());
+            lhsBuilder.append(diff.getActualName(), diff.getFormatValue(diff.getLeft()));
+            rhsBuilder.append(diff.getActualName(), diff.getFormatValue(diff.getRight()));
         }
 
         return Pair.of(lhsBuilder, rhsBuilder);
