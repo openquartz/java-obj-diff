@@ -66,12 +66,12 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
     private void appendFields(final Class<?> clazz) {
 
         if (Collection.class.isAssignableFrom(clazz)) {
-            diffBuilder.append("element", left, right);
+            diffBuilder.append("element", StringUtils.EMPTY, left, right);
             return;
         }
 
         if (Map.class.isAssignableFrom(clazz)) {
-            diffBuilder.append("map", left, right);
+            diffBuilder.append("map", StringUtils.EMPTY, left, right);
             return;
         }
 
@@ -149,7 +149,7 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
             }
 
             List<Field> effectiveFields = getEffectiveFields(clazz);
-            FIELD_CACHE.putIfAbsent(clazz,effectiveFields);
+            FIELD_CACHE.putIfAbsent(clazz, effectiveFields);
             return effectiveFields;
         } catch (Exception exception) {
             log.info("[CacheReflectionDiffBuilder#getAllFields] class:{} execute error!", clazz);

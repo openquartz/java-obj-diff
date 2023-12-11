@@ -1,5 +1,6 @@
 package com.openquartz.javaobjdiff;
 
+import com.openquartz.javaobjdiff.annotation.DiffAlias;
 import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         this(lhs, rhs, style, true);
     }
 
-    public DiffBuilder<T> append(final String fieldName, final boolean[] lhs, final boolean[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final String alias, final boolean[] lhs, final boolean[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -59,7 +60,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         }
 
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Boolean[]>(fieldName) {
+            diffs.add(new Diff<Boolean[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -76,7 +77,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final byte[] lhs, final byte[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, String alias, final byte[] lhs, final byte[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -84,7 +85,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Byte[]>(fieldName) {
+            diffs.add(new Diff<Byte[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -101,7 +102,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final char[] lhs,
+    public DiffBuilder<T> append(final String fieldName, final String alias, final char[] lhs,
         final char[] rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -110,7 +111,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Character[]>(fieldName) {
+            diffs.add(new Diff<Character[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -127,7 +128,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final double[] lhs, final double[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, final String alias, final double[] lhs, final double[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -135,7 +136,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Double[]>(fieldName) {
+            diffs.add(new Diff<Double[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -163,7 +164,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final float[] lhs, final float[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, String alias, final float[] lhs, final float[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -171,7 +172,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Float[]>(fieldName) {
+            diffs.add(new Diff<Float[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -199,7 +200,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
      * @return this
      * @throws IllegalArgumentException if field name is {@code null}
      */
-    public DiffBuilder<T> append(final String fieldName, final int[] lhs, final int[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, String alias, final int[] lhs, final int[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -207,7 +208,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Integer[]>(fieldName) {
+            diffs.add(new Diff<Integer[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -224,7 +225,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final long[] lhs, final long[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, String alias, final long[] lhs, final long[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -232,7 +233,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Long[]>(fieldName) {
+            diffs.add(new Diff<Long[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -249,7 +250,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         return this;
     }
 
-    public DiffBuilder<T> append(final String fieldName, final short[] lhs, final short[] rhs) {
+    public DiffBuilder<T> append(final String fieldName, String alias, final short[] lhs, final short[] rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -257,7 +258,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Short[]>(fieldName) {
+            diffs.add(new Diff<Short[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -278,7 +279,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
         validateFieldNotNull(field);
 
-        String fieldName = getAllQualifiedFiledName(prefix,field);
+        String fieldName = getAllQualifiedFiledName(prefix, field);
 
         if (objectsTriviallyEqual) {
             return this;
@@ -288,6 +289,9 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
+        DiffAlias diffAlias = field.getDeclaredAnnotation(DiffAlias.class);
+        String alias = Objects.nonNull(diffAlias) ? diffAlias.alias() : null;
+
         DiffCompare diffCompare = field.getDeclaredAnnotation(DiffCompare.class);
         if (diffCompare != null) {
 
@@ -295,7 +299,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             if (!diffComparable.diff(lhs, rhs)) {
                 return this;
             }
-            diffs.add(new Diff<>(fieldName) {
+
+            diffs.add(new Diff<>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -312,16 +317,16 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        return append(fieldName, lhs, rhs);
+        return append(fieldName, alias, lhs, rhs);
     }
 
-    private static String getAllQualifiedFiledName(String prefix,Field field) {
-        return Stream.of(prefix,field.getName())
+    private static String getAllQualifiedFiledName(String prefix, Field field) {
+        return Stream.of(prefix, field.getName())
             .filter(StringUtils::isNotBlank)
             .collect(Collectors.joining(CommonConstants.POINT_SPLITTER));
     }
 
-    public DiffBuilder<T> append(final String fieldName, final Object lhs, final Object rhs) {
+    public DiffBuilder<T> append(final String fieldName, final String alias, final Object lhs, final Object rhs) {
 
         validateFieldNameNotNull(fieldName);
 
@@ -337,31 +342,31 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
         if (objectToTest.getClass().isArray()) {
             if (objectToTest instanceof boolean[]) {
-                return append(fieldName, (boolean[]) lhs, (boolean[]) rhs);
+                return append(fieldName, alias, (boolean[]) lhs, (boolean[]) rhs);
             }
             if (objectToTest instanceof byte[]) {
-                return append(fieldName, (byte[]) lhs, (byte[]) rhs);
+                return append(fieldName, alias, (byte[]) lhs, (byte[]) rhs);
             }
             if (objectToTest instanceof char[]) {
-                return append(fieldName, (char[]) lhs, (char[]) rhs);
+                return append(fieldName, alias, (char[]) lhs, (char[]) rhs);
             }
             if (objectToTest instanceof double[]) {
-                return append(fieldName, (double[]) lhs, (double[]) rhs);
+                return append(fieldName, alias, (double[]) lhs, (double[]) rhs);
             }
             if (objectToTest instanceof float[]) {
-                return append(fieldName, (float[]) lhs, (float[]) rhs);
+                return append(fieldName, alias, (float[]) lhs, (float[]) rhs);
             }
             if (objectToTest instanceof int[]) {
-                return append(fieldName, (int[]) lhs, (int[]) rhs);
+                return append(fieldName, alias, (int[]) lhs, (int[]) rhs);
             }
             if (objectToTest instanceof long[]) {
-                return append(fieldName, (long[]) lhs, (long[]) rhs);
+                return append(fieldName, alias, (long[]) lhs, (long[]) rhs);
             }
             if (objectToTest instanceof short[]) {
-                return append(fieldName, (short[]) lhs, (short[]) rhs);
+                return append(fieldName, alias, (short[]) lhs, (short[]) rhs);
             }
 
-            return append(fieldName, (Object[]) lhs, (Object[]) rhs);
+            return append(fieldName, alias, (Object[]) lhs, (Object[]) rhs);
         }
 
         // Not array type
@@ -407,7 +412,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         }
     }
 
-    public DiffBuilder<T> append(final String fieldName, final Object[] lhs,
+    public DiffBuilder<T> append(final String fieldName, final String alias, final Object[] lhs,
         final Object[] rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -417,7 +422,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         }
 
         if (!Arrays.equals(lhs, rhs)) {
-            diffs.add(new Diff<Object[]>(fieldName) {
+            diffs.add(new Diff<Object[]>(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override

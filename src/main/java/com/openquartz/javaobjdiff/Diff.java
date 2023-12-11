@@ -3,6 +3,7 @@ package com.openquartz.javaobjdiff;
 import java.lang.reflect.Type;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,18 +15,27 @@ public abstract class Diff<T> extends Pair<T, T> {
     private final String fieldName;
 
     /**
+     * 别名
+     */
+    private final String alias;
+
+    /**
      * <p>
      * Constructs a new {@code Diff} for the given field name.
      * </p>
      *
-     * @param fieldName
-     *            the name of the field
+     * @param fieldName the name of the field
      */
-    protected Diff(final String fieldName) {
+    protected Diff(final String fieldName, String alias) {
         this.type = ObjectUtils.defaultIfNull(
-                TypeUtils.getTypeArguments(getClass(), Diff.class)
-                    .get(Diff.class.getTypeParameters()[0]), Object.class);
+            TypeUtils.getTypeArguments(getClass(), Diff.class)
+                .get(Diff.class.getTypeParameters()[0]), Object.class);
         this.fieldName = fieldName;
+        this.alias = alias;
+    }
+
+    protected Diff(final String fieldName) {
+        this(fieldName, null);
     }
 
     /**
@@ -50,6 +60,13 @@ public abstract class Diff<T> extends Pair<T, T> {
         return fieldName;
     }
 
+    public final String getActualName(){
+        if (StringUtils.isNotBlank(alias)){
+            return alias;
+        }
+        return fieldName;
+    }
+
     /**
      * <p>
      * Returns a {@code String} representation of the {@code Diff}, with the
@@ -58,7 +75,6 @@ public abstract class Diff<T> extends Pair<T, T> {
      * <pre>
      * [fieldname: left-value, right-value]
      * </pre>
-     *
      *
      * @return the string representation
      */
@@ -72,8 +88,7 @@ public abstract class Diff<T> extends Pair<T, T> {
      * Throws {@code UnsupportedOperationException}.
      * </p>
      *
-     * @param value
-     *            ignored
+     * @param value ignored
      * @return nothing
      */
     @Override
