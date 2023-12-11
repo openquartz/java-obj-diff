@@ -4,7 +4,7 @@ public class ClassUtils {
 
     public static boolean isJDKClass(Class<?> clazz) {
         String className = clazz.getName();
-        boolean b = className.startsWith("java.lang") ||
+        return className.startsWith("java.lang") ||
             className.startsWith("java.util") ||
             className.startsWith("java.io") ||
             className.startsWith("java.net") ||
@@ -14,7 +14,6 @@ public class ClassUtils {
             className.startsWith("java.util.concurrent") ||
             className.startsWith("java.util.regex") ||
             className.startsWith("java.lang.reflect");
-        return b;
     }
 
 }
