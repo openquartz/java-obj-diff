@@ -111,9 +111,27 @@ private Date birthday;
 
 ```java
 public class DateTimeDiffFormatter implements DiffFormatter {
+    
     @Override
     public String format(Object obj) {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd").format((Date) obj);
+        
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DEFAULT_FORMATTER_PATTERN;
+        }
+
+        if (Objects.isNull(value)) {
+            return null;
+        }
+
+        if (value instanceof Date) {
+            return DateFormatUtils.format((Date) value, pattern);
+        }
+
+        if (value instanceof TemporalAccessor) {
+            return DateTimeFormatter.ofPattern(pattern).format((LocalDateTime) value);
+        }
+
+        throw new IllegalArgumentException("Unsupported type: " + value.getClass());
     }
 }
 ```
