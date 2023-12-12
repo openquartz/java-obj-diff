@@ -1,12 +1,18 @@
 package com.openquartz.javaobjdiff.test.bean;
 
 import com.openquartz.javaobjdiff.annotation.DiffBean;
+import com.openquartz.javaobjdiff.annotation.DiffFormat;
+import com.openquartz.javaobjdiff.formatter.DateTimeDiffFormatter;
+import java.time.LocalDateTime;
 
 public class Person {
 
     private String name;
 
     private Integer age;
+
+    @DiffFormat(using = DateTimeDiffFormatter.class, pattern = "yyyy-MM-dd")
+    private LocalDateTime birthDate;
 
     @DiffBean
     private Address address;
@@ -33,5 +39,13 @@ public class Person {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public LocalDateTime getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDateTime birthDate) {
+        this.birthDate = birthDate;
     }
 }

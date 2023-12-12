@@ -92,8 +92,6 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
                     Object lhs = readField(field, leftValue, true);
                     Object rhs = readField(field, rightValue, true);
 
-                    diffBuilder.append(prefix, field, lhs, rhs);
-
                     // append diff bean
                     DiffBean diffBean = field.getDeclaredAnnotation(DiffBean.class);
                     if (diffBean != null && !ClassUtils.isJDKClass(field.getType())) {
@@ -103,6 +101,9 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
                             .collect(Collectors.joining(CommonConstants.POINT_SPLITTER));
 
                         appendAllFields(specPrefix, field.getType(), lhs, rhs);
+                    } else {
+                        // append simple field
+                        diffBuilder.append(prefix, field, lhs, rhs);
                     }
                 } catch (final IllegalAccessException ex) {
                     //this can't happen. Would get a Security exception instead
@@ -112,7 +113,6 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
             }
         }
     }
-
 
     private boolean accept(final Field field) {
         // 处理排除字段

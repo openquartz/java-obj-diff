@@ -14,9 +14,9 @@ public class DefaultDiffComparator implements DiffComparable {
     public boolean diff(Object source, Object target) {
 
         if (source == target) {
-            return true;
+            return false;
         }
 
-        return Objects.equals(source, target);
+        return !Objects.equals(source, target);
     }
 }

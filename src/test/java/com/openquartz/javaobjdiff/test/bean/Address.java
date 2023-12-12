@@ -1,9 +1,12 @@
 package com.openquartz.javaobjdiff.test.bean;
 
+import com.openquartz.javaobjdiff.annotation.DiffAlias;
+
 public class Address {
 
     private String country;
 
+    @DiffAlias(alias = "城市")
     private String city;
 
     public String getCountry() {
