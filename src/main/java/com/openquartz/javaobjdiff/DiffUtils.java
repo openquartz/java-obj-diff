@@ -26,7 +26,10 @@ public class DiffUtils {
     }
 
     public static <T> String diff(T source, T target) {
-        return diff(source, target, StringUtils.EMPTY);
+        return diff(source, target, StringUtils.EMPTY, new String[]{});
     }
 
+    public static <T> String diff(T source, T target, String... excludeField) {
+        return diff(source, target, StringUtils.EMPTY, excludeField);
+    }
 }

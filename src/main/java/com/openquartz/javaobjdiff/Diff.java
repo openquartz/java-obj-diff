@@ -1,14 +1,12 @@
 package com.openquartz.javaobjdiff;
 
+import com.openquartz.javaobjdiff.annotation.DiffFormat;
 import java.lang.reflect.Type;
-
-import java.util.Date;
 import java.util.Objects;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class Diff<T> extends Pair<T, T> {
@@ -22,6 +20,8 @@ public abstract class Diff<T> extends Pair<T, T> {
      * 别名
      */
     private final String alias;
+
+    private DiffFormatter diffFormatter;
 
     private String pattern;
 
@@ -46,10 +46,20 @@ public abstract class Diff<T> extends Pair<T, T> {
 
     /**
      * set pattern
-     * @param pattern pattern
+     *
+     * @param formatter formatter
      */
-    public Diff<?> setPattern(String pattern) {
-        this.pattern = pattern;
+    public Diff<?> setPattern(DiffFormat formatter) {
+
+        if (formatter != null) {
+            try {
+                this.diffFormatter = formatter.using().getDeclaredConstructor().newInstance();
+                this.pattern = formatter.pattern();
+            } catch (Exception ex) {
+                ExceptionUtils.rethrow(ex);
+            }
+        }
+
         return this;
     }
 
@@ -75,21 +85,18 @@ public abstract class Diff<T> extends Pair<T, T> {
         return fieldName;
     }
 
-    public final String getActualName(){
-        if (StringUtils.isNotBlank(alias)){
+    public final String getActualName() {
+        if (StringUtils.isNotBlank(alias)) {
             return alias;
         }
         return fieldName;
     }
 
-    public Object getFormatValue(Object value){
-        if (Objects.isNull(value)){
-            return null;
+    public Object getFormatValue(Object value) {
+        if (Objects.isNull(diffFormatter)) {
+            return value;
         }
-        if (value instanceof Date){
-            return DateFormatUtils.format((Date) value, pattern);
-        }
-        return value;
+        return diffFormatter.format(value, pattern);
     }
 
     /**

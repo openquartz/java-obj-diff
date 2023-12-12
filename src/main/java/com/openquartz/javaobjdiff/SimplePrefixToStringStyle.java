@@ -2,8 +2,6 @@ package com.openquartz.javaobjdiff;
 
 import static com.openquartz.javaobjdiff.CommonConstants.POINT_SPLITTER;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
@@ -27,11 +25,6 @@ public class SimplePrefixToStringStyle extends ToStringStyle {
     }
 
     protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
-
-        if (value instanceof Date) {
-            value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(value);
-        }
-
         buffer.append(value);
     }
 

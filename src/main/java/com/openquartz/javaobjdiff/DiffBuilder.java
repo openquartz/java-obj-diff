@@ -293,8 +293,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         DiffAlias diffAlias = field.getDeclaredAnnotation(DiffAlias.class);
         String alias = Objects.nonNull(diffAlias) ? diffAlias.alias() : null;
 
-        DiffFormat diffFormat = field.getDeclaredAnnotation(DiffFormat.class);
-        String pattern = Objects.nonNull(diffFormat) ? diffFormat.pattern() : null;
+        DiffFormat formatter = field.getDeclaredAnnotation(DiffFormat.class);
 
         DiffCompare diffCompare = field.getDeclaredAnnotation(DiffCompare.class);
         if (diffCompare != null) {
@@ -316,12 +315,12 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 public Object getRight() {
                     return rhs;
                 }
-            }.setPattern(pattern));
+            }.setPattern(formatter));
 
             return this;
         }
 
-        return append(fieldName, pattern, alias, lhs, rhs);
+        return append(fieldName, formatter, alias, lhs, rhs);
     }
 
     private static String getAllQualifiedFiledName(String prefix, Field field) {
@@ -331,10 +330,11 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
     }
 
     public DiffBuilder<T> append(final String fieldName, final String alias, final Object lhs, final Object rhs) {
-        return append(fieldName, StringUtils.EMPTY, alias, lhs, rhs);
+        return append(fieldName, null, alias, lhs, rhs);
     }
 
-    public DiffBuilder<T> append(final String fieldName, final String pattern, final String alias, final Object lhs,
+    public DiffBuilder<T> append(final String fieldName, final DiffFormat formatter,
+        final String alias, final Object lhs,
         final Object rhs) {
 
         validateFieldNameNotNull(fieldName);
@@ -395,7 +395,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             public Object getRight() {
                 return rhs;
             }
-        }.setPattern(pattern));
+        }.setPattern(formatter));
 
         return this;
     }
