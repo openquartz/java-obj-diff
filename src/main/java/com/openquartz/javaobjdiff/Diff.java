@@ -2,7 +2,9 @@ package com.openquartz.javaobjdiff;
 
 import com.openquartz.javaobjdiff.annotation.DiffFormat;
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -24,6 +26,8 @@ public abstract class Diff<T> extends Pair<T, T> {
     private DiffFormatter diffFormatter;
 
     private String pattern;
+
+    private static final Map<Class<? extends DiffFormatter>, DiffFormatter> formatterMap = new ConcurrentHashMap<>();
 
     /**
      * <p>
@@ -52,14 +56,18 @@ public abstract class Diff<T> extends Pair<T, T> {
     public Diff<?> setPattern(DiffFormat formatter) {
 
         if (formatter != null) {
-            try {
-                this.diffFormatter = formatter.using().getDeclaredConstructor().newInstance();
-                this.pattern = formatter.pattern();
-            } catch (Exception ex) {
-                ExceptionUtils.rethrow(ex);
+            DiffFormatter diffFormatter = formatterMap.get(formatter.using());
+            if (diffFormatter == null) {
+                try {
+                    diffFormatter = formatter.using().getDeclaredConstructor().newInstance();
+                } catch (Exception ex) {
+                    ExceptionUtils.rethrow(ex);
+                }
+                formatterMap.putIfAbsent(formatter.using(), diffFormatter);
             }
+            this.diffFormatter = formatterMap.get(formatter.using());
+            this.pattern = formatter.pattern();
         }
-
         return this;
     }
 
