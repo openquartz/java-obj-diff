@@ -90,6 +90,17 @@ public class User {
 }
 ```
 
+`@DiffBean`注解也支持加在 Collection及其子类上。并支持到Collection的元素类型为自定义类型
+例如：
+```java
+
+ @DiffBean
+private List<Packet> packetList;
+
+@DiffBean
+private List<Integer> friendIdList;
+```
+
 #### 别名支持
 使用 `@DiffAlias` 注解可以自定义某个属性的别名。
 

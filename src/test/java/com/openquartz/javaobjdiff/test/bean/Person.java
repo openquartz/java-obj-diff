@@ -18,7 +18,7 @@ public class Person {
     @DiffBean
     private Address address;
 
-//    @DiffBean
+    @DiffBean
     private List<Packet> packetList;
 
     @DiffBean
