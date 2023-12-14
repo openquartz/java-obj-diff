@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 自定义格式化展示
  * @author svnee
  */
 @Retention(RetentionPolicy.RUNTIME)

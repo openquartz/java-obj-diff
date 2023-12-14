@@ -103,12 +103,13 @@ private String name;
 使用 `@DiffFormat` 注解可以自定义某个属性的格式化。在输出结果中展示格式化后的数据。
 
 ```java
-@DiffFormat(pattern = "yyyy-MM-dd",using=DateTimeDiffFormatter.class)
+@DiffFormat(pattern = "yyyy-MM-dd", using=DateTimeDiffFormatter.class)
 private Date birthday;
 ```
 
 也可以自定义格式化器。需要实现接口:`com.openquartz.javaobjdiff.DiffFormatter`
 
+例如：
 ```java
 public class DateTimeDiffFormatter implements DiffFormatter {
     
@@ -135,3 +136,4 @@ public class DateTimeDiffFormatter implements DiffFormatter {
     }
 }
 ```
+使用场景：自定义类型、枚举类型等。可自己实现自定义格式化方式。

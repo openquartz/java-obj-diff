@@ -4,6 +4,7 @@ import com.openquartz.javaobjdiff.annotation.DiffBean;
 import com.openquartz.javaobjdiff.annotation.DiffFormat;
 import com.openquartz.javaobjdiff.formatter.DateTimeDiffFormatter;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Person {
 
@@ -16,6 +17,12 @@ public class Person {
 
     @DiffBean
     private Address address;
+
+//    @DiffBean
+    private List<Packet> packetList;
+
+    @DiffBean
+    private List<Integer> friendIdList;
 
     public String getName() {
         return name;
@@ -47,5 +54,21 @@ public class Person {
 
     public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public List<Packet> getPacketList() {
+        return packetList;
+    }
+
+    public void setPacketList(List<Packet> packetList) {
+        this.packetList = packetList;
+    }
+
+    public List<Integer> getFriendIdList() {
+        return friendIdList;
+    }
+
+    public void setFriendIdList(List<Integer> friendIdList) {
+        this.friendIdList = friendIdList;
     }
 }

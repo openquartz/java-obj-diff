@@ -7,12 +7,16 @@ import com.openquartz.javaobjdiff.annotation.DiffBean;
 import com.openquartz.javaobjdiff.annotation.DiffIgnore;
 import com.openquartz.javaobjdiff.util.ClassUtils;
 import com.openquartz.javaobjdiff.util.FieldUtils;
+import com.openquartz.javaobjdiff.util.IteratorUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -102,8 +106,46 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
 
                         appendAllFields(specPrefix, field.getType(), lhs, rhs);
                     } else {
-                        // append simple field
-                        diffBuilder.append(prefix, field, lhs, rhs);
+
+                        if (diffBean != null) {
+
+                            // 集合类型的数据
+                            if (Collection.class.isAssignableFrom(field.getType())) {
+                                // 获取泛型
+                                Type fieldGenericType = field.getGenericType();
+                                // 集合泛型是jdk类型直接走
+                                Class<?> elementType = ClassUtils.getCollectionType(fieldGenericType);
+                                if (ClassUtils.isJDKClass(elementType)) {
+                                    diffBuilder.append(prefix, field, lhs, rhs);
+                                } else {
+                                    // 自定义类型
+                                    Iterator<?> lhsIter =
+                                        Objects.nonNull(lhs) ? ((Collection<?>) lhs).iterator() : null;
+                                    Iterator<?> rhsIter =
+                                        Objects.nonNull(rhs) ? ((Collection<?>) rhs).iterator() : null;
+
+                                    int index = 0;
+                                    while (IteratorUtils.hasNext(lhsIter) || IteratorUtils.hasNext(rhsIter)) {
+
+                                        String specPrefix = Stream.of(prefix, field.getName())
+                                            .filter(StringUtils::isNotBlank)
+                                            .collect(Collectors.joining(CommonConstants.POINT_SPLITTER));
+
+                                        // append filed
+                                        appendAllFields(specPrefix + "[" + index + "]",
+                                            elementType,
+                                            IteratorUtils.next(lhsIter),
+                                            IteratorUtils.next(rhsIter));
+
+                                        index++;
+                                    }
+                                }
+                            }
+                        } else {
+
+                            // append simple field
+                            diffBuilder.append(prefix, field, lhs, rhs);
+                        }
                     }
                 } catch (final IllegalAccessException ex) {
                     //this can't happen. Would get a Security exception instead
