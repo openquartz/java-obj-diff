@@ -148,3 +148,5 @@ public class DateTimeDiffFormatter implements DiffFormatter {
 }
 ```
 使用场景：自定义类型、枚举类型等。可自己实现自定义格式化方式。
+
+使用示例代码详见：`com.openquartz.javaobjdiff.test.DiffUtilTest`

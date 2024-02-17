@@ -1,6 +1,5 @@
 package com.openquartz.javaobjdiff.test.bean;
 
-import com.openquartz.javaobjdiff.DiffComparable;
 import com.openquartz.javaobjdiff.annotation.DiffBean;
 import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import com.openquartz.javaobjdiff.annotation.DiffFormat;

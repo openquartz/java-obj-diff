@@ -1,3 +1,5 @@
+package com.openquartz.javaobjdiff.test;
+
 import com.openquartz.javaobjdiff.DiffUtils;
 import com.openquartz.javaobjdiff.test.bean.Address;
 import com.openquartz.javaobjdiff.test.bean.Packet;
