@@ -1,11 +1,14 @@
 package com.openquartz.javaobjdiff.test.bean;
 
+import com.openquartz.javaobjdiff.annotation.DiffCompare;
+import com.openquartz.javaobjdiff.comparator.BigDecimalEffectiveDiffComparator;
 import java.math.BigDecimal;
 
 public class Packet {
 
     private String name;
 
+    @DiffCompare(using = BigDecimalEffectiveDiffComparator.class)
     private BigDecimal money;
 
     public String getName() {

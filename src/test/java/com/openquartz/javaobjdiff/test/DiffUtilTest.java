@@ -26,7 +26,7 @@ public class DiffUtilTest {
         packet1.setName("LV");
         Packet packet2 = new Packet();
         packet2.setName("PT");
-        packet2.setMoney(new BigDecimal("2.0"));
+        packet2.setMoney(new BigDecimal("2.000"));
 
         Person person1 = new Person();
         person1.setAge(10);
