@@ -415,7 +415,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
 
         try {
             DiffComparable instance = diffComparableClass.getDeclaredConstructor().newInstance();
-            return diffComparableInstanceMap.putIfAbsent(diffComparableClass, instance);
+            DiffComparable actualInstance = diffComparableInstanceMap.putIfAbsent(diffComparableClass, instance);
+            return actualInstance == null ? instance : actualInstance;
         } catch (Exception ex) {
             return ExceptionUtils.rethrow(ex);
         }

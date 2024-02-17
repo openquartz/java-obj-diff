@@ -1,7 +1,10 @@
 package com.openquartz.javaobjdiff.test.bean;
 
+import com.openquartz.javaobjdiff.DiffComparable;
 import com.openquartz.javaobjdiff.annotation.DiffBean;
+import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import com.openquartz.javaobjdiff.annotation.DiffFormat;
+import com.openquartz.javaobjdiff.annotation.DiffIgnore;
 import com.openquartz.javaobjdiff.formatter.DateTimeDiffFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +13,10 @@ public class Person {
 
     private String name;
 
+    @DiffCompare(using = SelfEnumComparator.class)
+    private Sex sex;
+
+    @DiffIgnore
     private Integer age;
 
     @DiffFormat(using = DateTimeDiffFormatter.class, pattern = "yyyy-MM-dd")
@@ -30,6 +37,14 @@ public class Person {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
     }
 
     public Integer getAge() {
