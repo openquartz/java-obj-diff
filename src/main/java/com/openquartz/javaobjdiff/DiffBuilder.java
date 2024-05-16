@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * @param <T> T
@@ -293,7 +294,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         DiffAlias diffAlias = field.getDeclaredAnnotation(DiffAlias.class);
         String alias = Objects.nonNull(diffAlias) ? diffAlias.alias() : null;
 
-        DiffFormat formatter = field.getDeclaredAnnotation(DiffFormat.class);
+        DiffFormat formatter = AnnotationUtils.findAnnotation(field, DiffFormat.class);
 
         DiffCompare diffCompare = field.getDeclaredAnnotation(DiffCompare.class);
         if (diffCompare != null) {

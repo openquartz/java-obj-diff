@@ -3,6 +3,7 @@ package com.openquartz.javaobjdiff.annotation;
 import com.openquartz.javaobjdiff.DiffFormatter;
 import com.openquartz.javaobjdiff.formatter.DefaultDiffFormatter;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -12,7 +13,8 @@ import java.lang.annotation.Target;
  * @author svnee
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Inherited
 public @interface DiffFormat {
 
     /**
