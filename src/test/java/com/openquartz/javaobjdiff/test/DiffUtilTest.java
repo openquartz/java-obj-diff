@@ -32,6 +32,9 @@ public class DiffUtilTest {
         person1.setAge(10);
         person1.setName("jack");
         person1.setSex(Sex.MAN);
+        person1.setMobile("17000000056");
+        person1.setEmail("wangtest1111@126.com");
+        person1.setIdCard("321556199301152110");
         person1.setAddress(address1);
         person1.setBirthDate(LocalDateTime.now());
         person1.setFriendIdList(List.of(1,2,3));
@@ -45,6 +48,9 @@ public class DiffUtilTest {
         person2.setAge(11);
         person2.setName("tom");
         person2.setSex(Sex.WOMAN);
+        person2.setMobile("17130000056");
+        person2.setEmail("litest2211@126.com");
+        person2.setIdCard("301556199301152110");
         person2.setAddress(address2);
         person2.setBirthDate(LocalDateTime.now().plusDays(-10));
         person2.setFriendIdList(List.of(2,3,4));

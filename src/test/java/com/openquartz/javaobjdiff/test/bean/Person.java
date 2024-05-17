@@ -5,6 +5,9 @@ import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import com.openquartz.javaobjdiff.annotation.DiffFormat;
 import com.openquartz.javaobjdiff.annotation.DiffIgnore;
 import com.openquartz.javaobjdiff.formatter.DateTimeDiffFormatter;
+import com.openquartz.javaobjdiff.formatter.datamask.EmailDataMask;
+import com.openquartz.javaobjdiff.formatter.datamask.IdCardDataMask;
+import com.openquartz.javaobjdiff.formatter.datamask.MobileDataMask;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +17,15 @@ public class Person {
 
     @DiffCompare(using = SelfEnumComparator.class)
     private Sex sex;
+
+    @MobileDataMask
+    private String mobile;
+
+    @EmailDataMask
+    private String email;
+
+    @IdCardDataMask
+    private String idCard;
 
     @DiffIgnore
     private Integer age;
@@ -84,5 +96,29 @@ public class Person {
 
     public void setFriendIdList(List<Integer> friendIdList) {
         this.friendIdList = friendIdList;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

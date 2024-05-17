@@ -11,6 +11,10 @@ public class IdCardDataMaskFormatter implements DiffFormatter {
     @Override
     public Object format(Object value, String pattern) {
 
+        if (value == null) {
+            return null;
+        }
+
         if (!(value instanceof String)) {
             throw new IllegalArgumentException("not support value type!type must be String");
         }
