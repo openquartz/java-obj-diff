@@ -150,3 +150,9 @@ public class DateTimeDiffFormatter implements DiffFormatter {
 使用场景：自定义类型、枚举类型等。可自己实现自定义格式化方式。
 
 使用示例代码详见：`com.openquartz.javaobjdiff.test.DiffUtilTest`
+
+#### 脱敏支持
+使用注解可以支持对应的属性脱敏。\
+`@EmailDataMask`可以支持邮箱脱敏。\
+`@IdCardDataMask`可以支持身份证号脱敏。\
+`@MobileDataMask`可以支持手机号脱敏。
