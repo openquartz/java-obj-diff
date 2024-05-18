@@ -1,9 +1,9 @@
 package com.openquartz.javaobjdiff;
 
+import com.openquartz.javaobjdiff.util.Objects;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

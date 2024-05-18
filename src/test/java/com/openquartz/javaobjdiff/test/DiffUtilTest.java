@@ -5,9 +5,9 @@ import com.openquartz.javaobjdiff.test.bean.Address;
 import com.openquartz.javaobjdiff.test.bean.Packet;
 import com.openquartz.javaobjdiff.test.bean.Person;
 import com.openquartz.javaobjdiff.test.bean.Sex;
+import com.openquartz.javaobjdiff.util.IteratorUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class DiffUtilTest {
 
@@ -37,8 +37,8 @@ public class DiffUtilTest {
         person1.setIdCard("321556199301152110");
         person1.setAddress(address1);
         person1.setBirthDate(LocalDateTime.now());
-        person1.setFriendIdList(List.of(1,2,3));
-        person1.setPacketList(List.of(packet1,packet2));
+        person1.setFriendIdList(IteratorUtils.toList(1,2,3));
+        person1.setPacketList(IteratorUtils.toList(packet1,packet2));
 
 
         Packet packet3 = new Packet();
@@ -53,8 +53,8 @@ public class DiffUtilTest {
         person2.setIdCard("301556199301152110");
         person2.setAddress(address2);
         person2.setBirthDate(LocalDateTime.now().plusDays(-10));
-        person2.setFriendIdList(List.of(2,3,4));
-        person2.setPacketList(List.of(packet3));
+        person2.setFriendIdList(IteratorUtils.toList(2,3,4));
+        person2.setPacketList(IteratorUtils.toList(packet3));
 
         String diff = DiffUtils.diff(person1, person2);
         System.out.println(diff);

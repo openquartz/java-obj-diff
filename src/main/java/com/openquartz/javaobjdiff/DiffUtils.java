@@ -1,6 +1,6 @@
 package com.openquartz.javaobjdiff;
 
-import java.util.Set;
+import com.openquartz.javaobjdiff.util.IteratorUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
@@ -15,14 +15,14 @@ public class DiffUtils {
 
     public static <T> String diff(T source, T target, ToStringStyle toStringStyle, String... excludeFiled) {
         CacheReflectionDiffBuilder<T> diffBuilder = new CacheReflectionDiffBuilder<>(source, target, toStringStyle);
-        diffBuilder.setExcludeFieldSet(Set.of(excludeFiled));
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
         return diffBuilder.build().toString();
     }
 
     public static <T> String diff(T source, T target, String prefix, String... excludeFiled) {
         CacheReflectionDiffBuilder<T> diffBuilder =
             new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
-        diffBuilder.setExcludeFieldSet(Set.of(excludeFiled));
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
         return diffBuilder.build().toString();
     }
 

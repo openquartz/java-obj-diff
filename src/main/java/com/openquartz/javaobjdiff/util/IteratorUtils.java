@@ -1,7 +1,12 @@
 package com.openquartz.javaobjdiff.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author svnee
@@ -37,5 +42,27 @@ public class IteratorUtils {
             return iterator.next();
         }
         return null;
+    }
+
+    @SafeVarargs
+    public static <T> Set<T> toSet(T... args) {
+
+        if (args == null || args.length == 0) {
+            return new HashSet<>();
+        }
+
+        Set<T> set = new HashSet<>(args.length);
+        set.addAll(Arrays.asList(args));
+        return set;
+    }
+
+    public static <T> List<T> toList(T... args) {
+        if (args == null || args.length == 0) {
+            return new ArrayList<>();
+        }
+
+        List<T> list = new ArrayList<>(args.length);
+        list.addAll(Arrays.asList(args));
+        return list;
     }
 }

@@ -1,6 +1,8 @@
 package com.openquartz.javaobjdiff.formatter.datamask;
 
 import com.openquartz.javaobjdiff.DiffFormatter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -34,7 +36,10 @@ public class EmailDataMaskFormatter implements DiffFormatter {
         int atIndex = email.indexOf("@");
         String prefix = email.substring(0, atIndex);
         int lengthToReplace = prefix.length() - 1;
-        String replacement = "*".repeat(lengthToReplace);
+
+        String replacement = Stream.generate(() -> "*")
+            .limit(lengthToReplace)
+            .collect(Collectors.joining());
 
         return replacement + prefix.charAt(0) + "@" + email.substring(atIndex);
     }
