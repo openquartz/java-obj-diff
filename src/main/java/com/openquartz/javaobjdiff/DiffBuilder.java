@@ -304,7 +304,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
                 return this;
             }
 
-            diffs.add(new Diff<>(fieldName, alias) {
+            diffs.add(new Diff(fieldName, alias) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -384,7 +384,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        diffs.add(new Diff<>(fieldName, alias) {
+        diffs.add(new Diff(fieldName, alias) {
             private static final long serialVersionUID = 1L;
 
             @Override
