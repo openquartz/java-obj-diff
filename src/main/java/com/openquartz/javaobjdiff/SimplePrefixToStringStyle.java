@@ -24,6 +24,7 @@ public class SimplePrefixToStringStyle extends ToStringStyle {
         setUseIdentityHashCode(false);
     }
 
+    @Override
     protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
         buffer.append(value);
     }
@@ -33,6 +34,7 @@ public class SimplePrefixToStringStyle extends ToStringStyle {
      *
      * @param useFieldNames the new useFieldNames flag
      */
+    @Override
     protected void setUseFieldNames(final boolean useFieldNames) {
         this.useFieldNames = useFieldNames;
         super.setUseFieldNames(useFieldNames);
@@ -43,6 +45,7 @@ public class SimplePrefixToStringStyle extends ToStringStyle {
      *
      * @param fieldNameValueSeparator the new field name value separator text
      */
+    @Override
     protected void setFieldNameValueSeparator(String fieldNameValueSeparator) {
         if (fieldNameValueSeparator == null) {
             fieldNameValueSeparator = StringUtils.EMPTY;

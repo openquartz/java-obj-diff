@@ -53,11 +53,13 @@ public class CacheReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
         this.diffBuilder = new DiffBuilder<>(lhs, rhs, style);
     }
 
-    public CacheReflectionDiffBuilder<T> setExcludeFieldSet(Set<String> excludeFieldSet) {
+
+    public void setExcludeFieldSet(Set<String> excludeFieldSet) {
+        // fix set后还是在当前对象，简化代码
         this.excludeFieldSet = excludeFieldSet;
-        return this;
     }
 
+    @Override
     public DiffResult<T> build() {
         if (left.equals(right)) {
             return diffBuilder.build();
