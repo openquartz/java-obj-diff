@@ -1,7 +1,7 @@
 package com.openquartz.javaobjdiff;
 
-import com.openquartz.javaobjdiff.util.IteratorUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import com.openquartz.javaobjdiff.util.IteratorUtils;
 
 /**
  * @author svnee
@@ -13,17 +13,13 @@ public class DiffUtils {
     private DiffUtils() {
     }
 
-    public static <T> String diff(T source, T target, ToStringStyle toStringStyle, String... excludeFiled) {
-        CacheReflectionDiffBuilder<T> diffBuilder = new CacheReflectionDiffBuilder<>(source, target, toStringStyle);
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
-        return diffBuilder.build().toString();
+    public static <T> String diff(T source, T target, ToStringStyle toStringStyle, String... excludeField) {
+        return buildDiff(source, target, toStringStyle, excludeField).toString();
     }
 
-    public static <T> String diff(T source, T target, String prefix, String... excludeFiled) {
-        CacheReflectionDiffBuilder<T> diffBuilder =
-            new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
-        return diffBuilder.build().toString();
+    public static <T> String diff(T source, T target, String prefix, String... excludeField) {
+        ToStringStyle toStringStyle = new SimplePrefixToStringStyle(prefix);
+        return buildDiff(source, target, toStringStyle, excludeField).toString();
     }
 
     public static <T> String diff(T source, T target) {
@@ -34,47 +30,49 @@ public class DiffUtils {
         return diff(source, target, EMPTY, excludeField);
     }
 
-
     /**
-     * 对比差异，并返回{@link DiffResult}，可以更灵活的操作判断
+     * Compare differences and return {@link DiffResult} for more flexible operation and judgment.
      *
-     * @param source       源对象
-     * @param target       目标对象
-     * @param prefix       指定前缀，默认空字符串
-     * @param excludeFiled 需要移除不对比的字段
-     * @param <T>
-     * @return 返回{@link DiffResult}
+     * @param source       Source object
+     * @param target       Target object
+     * @param prefix       Specified prefix, default is empty string
+     * @param excludeField Fields to exclude from comparison
+     * @param <T>          Type of objects to compare
+     * @return {@link DiffResult}
      */
-    public static <T> DiffResult<T> diffObj(T source, T target, String prefix, String... excludeFiled) {
-        CacheReflectionDiffBuilder<T> diffBuilder =
-            new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
-        return diffBuilder.build();
+    public static <T> DiffResult<T> diffObj(T source, T target, String prefix, String... excludeField) {
+        ToStringStyle toStringStyle = new SimplePrefixToStringStyle(prefix);
+        return buildDiff(source, target, toStringStyle, excludeField);
     }
 
-
     /**
-     * 对比差异，并返回{@link DiffResult}，可以更灵活的操作判断
+     * Compare differences and return {@link DiffResult} for more flexible operation and judgment.
      *
-     * @param source 源对象
-     * @param target 目标对象
-     * @param <T>
-     * @return 返回{@link DiffResult}
+     * @param source Source object
+     * @param target Target object
+     * @param <T>    Type of objects to compare
+     * @return {@link DiffResult}
      */
     public static <T> DiffResult<T> diffObj(T source, T target) {
         return diffObj(source, target, EMPTY, new String[]{});
     }
 
     /**
-     * 对比差异，并返回{@link DiffResult}，可以更灵活的操作判断
+     * Compare differences and return {@link DiffResult} for more flexible operation and judgment.
      *
-     * @param source       源对象
-     * @param target       目标对象
-     * @param excludeField 需要移除不对比的字段
-     * @param <T>
-     * @return 返回{@link DiffResult}
+     * @param source       Source object
+     * @param target       Target object
+     * @param excludeField Fields to exclude from comparison
+     * @param <T>          Type of objects to compare
+     * @return {@link DiffResult}
      */
     public static <T> DiffResult<T> diffObj(T source, T target, String... excludeField) {
         return diffObj(source, target, EMPTY, excludeField);
+    }
+
+    private static <T> DiffResult<T> buildDiff(T source, T target, ToStringStyle toStringStyle, String... excludeField) {
+        CacheReflectionDiffBuilder<T> diffBuilder = new CacheReflectionDiffBuilder<>(source, target, toStringStyle);
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeField));
+        return diffBuilder.build();
     }
 }
