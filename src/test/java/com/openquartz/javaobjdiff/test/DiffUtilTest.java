@@ -1,17 +1,19 @@
 package com.openquartz.javaobjdiff.test;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import com.openquartz.javaobjdiff.DiffResult;
 import com.openquartz.javaobjdiff.DiffUtils;
 import com.openquartz.javaobjdiff.test.bean.Address;
 import com.openquartz.javaobjdiff.test.bean.Packet;
 import com.openquartz.javaobjdiff.test.bean.Person;
 import com.openquartz.javaobjdiff.test.bean.Sex;
 import com.openquartz.javaobjdiff.util.IteratorUtils;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class DiffUtilTest {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         Address address1 = new Address();
         address1.setCity("shanghai");
@@ -37,8 +39,8 @@ public class DiffUtilTest {
         person1.setIdCard("321556199301152110");
         person1.setAddress(address1);
         person1.setBirthDate(LocalDateTime.now());
-        person1.setFriendIdList(IteratorUtils.toList(1,2,3));
-        person1.setPacketList(IteratorUtils.toList(packet1,packet2));
+        person1.setFriendIdList(IteratorUtils.toList(1, 2, 3));
+        person1.setPacketList(IteratorUtils.toList(packet1, packet2));
 
 
         Packet packet3 = new Packet();
@@ -53,12 +55,20 @@ public class DiffUtilTest {
         person2.setIdCard("301556199301152110");
         person2.setAddress(address2);
         person2.setBirthDate(LocalDateTime.now().plusDays(-10));
-        person2.setFriendIdList(IteratorUtils.toList(2,3,4));
+        person2.setFriendIdList(IteratorUtils.toList(2, 3, 4));
         person2.setPacketList(IteratorUtils.toList(packet3));
 
         String diff = DiffUtils.diff(person1, person2);
         System.out.println(diff);
 
+        // test diff obj ，根据需要返回object对象，方便后续操作流程
+        DiffResult<Person> diffResult = DiffUtils.diffObj(person1, person2);
+        //根据是否存在差异决定使用的对象
+        Person personDiff = null;
+        if (diffResult.isDiff()) {
+            personDiff = diffResult.getRight();
+        }
+        System.out.println(personDiff.toString());
     }
 
 }

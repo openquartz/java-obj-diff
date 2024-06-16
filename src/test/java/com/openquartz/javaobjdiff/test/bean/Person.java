@@ -1,5 +1,8 @@
 package com.openquartz.javaobjdiff.test.bean;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.openquartz.javaobjdiff.annotation.DiffBean;
 import com.openquartz.javaobjdiff.annotation.DiffCompare;
 import com.openquartz.javaobjdiff.annotation.DiffFormat;
@@ -8,8 +11,6 @@ import com.openquartz.javaobjdiff.formatter.DateTimeDiffFormatter;
 import com.openquartz.javaobjdiff.formatter.datamask.EmailDataMask;
 import com.openquartz.javaobjdiff.formatter.datamask.IdCardDataMask;
 import com.openquartz.javaobjdiff.formatter.datamask.MobileDataMask;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class Person {
 
@@ -120,5 +121,21 @@ public class Person {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            "name:'" + name + '\'' +
+            ", sex:" + sex +
+            ", mobile:'" + mobile + '\'' +
+            ", email:'" + email + '\'' +
+            ", idCard:'" + idCard + '\'' +
+            ", age:" + age +
+            ", birthDate:" + birthDate +
+            ", address:" + address +
+            ", packetList:" + packetList +
+            ", friendIdList:" + friendIdList +
+            '}';
     }
 }
