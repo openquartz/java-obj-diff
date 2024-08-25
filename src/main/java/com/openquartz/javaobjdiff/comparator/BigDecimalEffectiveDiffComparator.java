@@ -14,15 +14,15 @@ public class BigDecimalEffectiveDiffComparator implements DiffComparable {
     public boolean diff(Object source, Object target) {
 
         if (source == target) {
-            return false;
+            return true;
         }
 
         if (source == null) {
-            return true;
+            return false;
         }
 
         if (target == null) {
-            return true;
+            return false;
         }
 
         if (!(source instanceof BigDecimal) || !(target instanceof BigDecimal)) {

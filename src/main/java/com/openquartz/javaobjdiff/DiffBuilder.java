@@ -300,7 +300,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         if (diffCompare != null) {
 
             DiffComparable diffComparable = getDiffComparator(diffCompare);
-            if (!diffComparable.diff(lhs, rhs)) {
+            if (diffComparable.diff(lhs, rhs)) {
                 return this;
             }
 
