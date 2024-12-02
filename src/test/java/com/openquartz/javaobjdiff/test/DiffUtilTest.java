@@ -1,9 +1,11 @@
 package com.openquartz.javaobjdiff.test;
 
+import com.openquartz.javaobjdiff.DiffComparableFactory;
 import com.openquartz.javaobjdiff.DiffUtils;
 import com.openquartz.javaobjdiff.test.bean.Address;
 import com.openquartz.javaobjdiff.test.bean.Packet;
 import com.openquartz.javaobjdiff.test.bean.Person;
+import com.openquartz.javaobjdiff.test.bean.SelfEnumComparator;
 import com.openquartz.javaobjdiff.test.bean.Sex;
 import com.openquartz.javaobjdiff.util.IteratorUtils;
 import java.math.BigDecimal;
@@ -55,6 +57,8 @@ public class DiffUtilTest {
         person2.setBirthDate(LocalDateTime.now().plusDays(-10));
         person2.setFriendIdList(IteratorUtils.toList(2,3,4));
         person2.setPacketList(IteratorUtils.toList(packet3));
+
+        DiffComparableFactory.register(SelfEnumComparator.class, new SelfEnumComparator());
 
         String diff = DiffUtils.diff(person1, person2);
         System.out.println(diff);

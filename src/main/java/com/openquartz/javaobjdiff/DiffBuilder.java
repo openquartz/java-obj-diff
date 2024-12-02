@@ -8,15 +8,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 
 /**
@@ -30,9 +27,6 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
     private final T left;
     private final T right;
     private final ToStringStyle style;
-
-    private static final Map<Class<? extends DiffComparable>, DiffComparable> diffComparableInstanceMap =
-        new ConcurrentHashMap<>();
 
     public DiffBuilder(final T lhs, final T rhs, final ToStringStyle style, final boolean testTriviallyEqual) {
 
@@ -384,7 +378,7 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
             return this;
         }
 
-        diffs.add(new Diff(fieldName, alias) {
+        diffs.add(new Diff<Object>(fieldName, alias) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -406,21 +400,8 @@ public class DiffBuilder<T> implements Builder<DiffResult<T>> {
         if (diffCompare == null) {
             return null;
         }
-
         Class<? extends DiffComparable> diffComparableClass = diffCompare.using();
-
-        DiffComparable diffComparable = diffComparableInstanceMap.get(diffComparableClass);
-        if (diffComparable != null) {
-            return diffComparable;
-        }
-
-        try {
-            DiffComparable instance = diffComparableClass.getDeclaredConstructor().newInstance();
-            DiffComparable actualInstance = diffComparableInstanceMap.putIfAbsent(diffComparableClass, instance);
-            return actualInstance == null ? instance : actualInstance;
-        } catch (Exception ex) {
-            return ExceptionUtils.rethrow(ex);
-        }
+        return DiffComparableFactory.get(diffComparableClass);
     }
 
     public DiffBuilder<T> append(final String fieldName, final String alias, final Object[] lhs, final Object[] rhs) {
