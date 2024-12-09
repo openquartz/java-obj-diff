@@ -43,6 +43,7 @@ public class MyComparator implements DiffComparable {
     }
 }
 ```
+如果自定义比较器可以使用无参构造实例化，可以不用手动注册到工厂中。否则用户需要自定义调用`com.openquartz.javaobjdiff.DiffComparableFactory.register`方法注入到工厂中。
 
 使用自定义比较器
 ```java
