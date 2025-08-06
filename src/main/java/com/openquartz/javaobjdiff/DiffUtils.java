@@ -14,16 +14,11 @@ public class DiffUtils {
     }
 
     public static <T> String diff(T source, T target, ToStringStyle toStringStyle, String... excludeFiled) {
-        CacheReflectionDiffBuilder<T> diffBuilder = new CacheReflectionDiffBuilder<>(source, target, toStringStyle);
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
-        return diffBuilder.build().toString();
+        return diffResult(source, target, toStringStyle, excludeFiled).toString();
     }
 
     public static <T> String diff(T source, T target, String prefix, String... excludeFiled) {
-        CacheReflectionDiffBuilder<T> diffBuilder =
-                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
-        return diffBuilder.build().toString();
+        return diffResult(source, target, prefix, excludeFiled).toString();
     }
 
     public static <T> String diff(T source, T target) {
@@ -35,15 +30,23 @@ public class DiffUtils {
     }
 
     public static <T> DiffResult<T> diffResult(T source, T target) {
-        CacheReflectionDiffBuilder<T> diffBuilder =
-                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(EMPTY));
-        return diffBuilder.build();
+        return diffResult(source, target, EMPTY, new String[]{});
     }
 
     public static <T> DiffResult<T> diffResult(T source, T target, String... excludeField) {
+        return diffResult(source, target, EMPTY, excludeField);
+    }
+
+    public static <T> DiffResult<T> diffResult(T source, T target, ToStringStyle toStringStyle, String... excludeFiled) {
+        CacheReflectionDiffBuilder<T> diffBuilder = new CacheReflectionDiffBuilder<>(source, target, toStringStyle);
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
+        return diffBuilder.build();
+    }
+
+    public static <T> DiffResult<T> diffResult(T source, T target, String prefix, String... excludeFiled) {
         CacheReflectionDiffBuilder<T> diffBuilder =
-                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(EMPTY));
-        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeField));
+                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
         return diffBuilder.build();
     }
 }
