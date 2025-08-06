@@ -21,7 +21,7 @@ public class DiffUtils {
 
     public static <T> String diff(T source, T target, String prefix, String... excludeFiled) {
         CacheReflectionDiffBuilder<T> diffBuilder =
-            new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
+                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(prefix));
         diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeFiled));
         return diffBuilder.build().toString();
     }
@@ -32,5 +32,18 @@ public class DiffUtils {
 
     public static <T> String diff(T source, T target, String... excludeField) {
         return diff(source, target, EMPTY, excludeField);
+    }
+
+    public static <T> DiffResult<T> diffResult(T source, T target) {
+        CacheReflectionDiffBuilder<T> diffBuilder =
+                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(EMPTY));
+        return diffBuilder.build();
+    }
+
+    public static <T> DiffResult<T> diffResult(T source, T target, String... excludeField) {
+        CacheReflectionDiffBuilder<T> diffBuilder =
+                new CacheReflectionDiffBuilder<>(source, target, new SimplePrefixToStringStyle(EMPTY));
+        diffBuilder.setExcludeFieldSet(IteratorUtils.toSet(excludeField));
+        return diffBuilder.build();
     }
 }
